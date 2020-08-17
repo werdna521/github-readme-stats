@@ -11,7 +11,7 @@ const fetcher = (variables, token) => {
           # fetch only owner repos & not forks
           repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {
             nodes {
-              languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
+              languages(first: 50, orderBy: {field: SIZE, direction: DESC}) {
                 edges {
                   size
                   node {
@@ -73,7 +73,6 @@ async function fetchTopLanguages(username) {
     }, {});
 
   const topLangs = Object.keys(repoNodes)
-    .slice(0, 5)
     .reduce((result, key) => {
       result[key] = repoNodes[key];
       return result;
