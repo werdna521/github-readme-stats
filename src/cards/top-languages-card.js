@@ -87,6 +87,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
 
   // filter out langauges to be hidden
   langs = langs
+    .map(lang => lowercaseTrim(lang.name) === 'jupyter notebook' ? Object.assign({}, lang, { size: lang.size - 3000000 }) : lang)
     .sort((a, b) => b.size - a.size)
     .filter((lang) => {
       return !langsToHide[lowercaseTrim(lang.name)];
@@ -94,7 +95,7 @@ const renderTopLanguages = (topLangs, options = {}) => {
 
   const totalLanguageSize = langs.reduce((acc, curr) => {
     return acc + curr.size;
-  }, -2500000);
+  }, 0);
 
   // returns theme based colors with proper overrides and defaults
   const { titleColor, textColor, bgColor } = getCardColors({
@@ -162,9 +163,9 @@ const renderTopLanguages = (topLangs, options = {}) => {
       items: langs.map((lang) => {
         return createProgressNode({
           width: width,
-          name: lowercaseTrim(lang.name) === 'jupyter notebook' ? `${lang.name} (scaled down by ${(2500000 / (totalLanguageSize + 2500000) * 100).toFixed(2)}%)` : lang.name,
+          name: lowercaseTrim(lang.name) === 'jupyter notebook' ? `${lang.name} (scaled down by ${(3000000 / (lang.size + 3000000) * 100).toFixed(2)}%)` : lang.name,
           color: lang.color || "#858585",
-          progress: lowercaseTrim(lang.name) === 'jupyter notebook' ? (((lang.size - 2500000) / totalLanguageSize) * 100).toFixed(2) : ((lang.size / totalLanguageSize) * 100).toFixed(2),
+          progress: lowercaseTrim(lang.name) === 'jupyter notebook' ? (((lang.size) / totalLanguageSize) * 100).toFixed(2) : ((lang.size / totalLanguageSize) * 100).toFixed(2),
         });
       }),
       gap: 40,
